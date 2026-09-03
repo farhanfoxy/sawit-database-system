@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "latest",
+    "axios": "latest",
+    "concurrently": "latest",
+    "laravel-vite-plugin": "latest",
+    "vite": "latest"
+  },
+  "dependencies": {
+    "@alpinejs/collapse": "latest",
+    "alpinejs": "latest",
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "chart.js": "^4.5.0"
+  }
+}

@@ -1,0 +1,12 @@
+@extends('layouts.app')
+@section('title','Trip Sawit')
+@section('page-title','Trip Sawit')
+@section('content')
+<div class="panel">
+<div class="panel-head align-items-end"><div><p class="eyebrow">TRANSACTIONS</p><h3>Semua Trip</h3></div></div>
+<form method="GET" class="filter-bar"><input type="date" name="from" value="{{ request('from') }}" class="form-control"><span>—</span><input type="date" name="to" value="{{ request('to') }}" class="form-control"><select name="status" class="form-select"><option value="">Semua Status</option>@foreach(['paid'=>'Paid','draft'=>'Draft','cancelled'=>'Cancelled'] as $v=>$l)<option value="{{ $v }}" @selected(request('status')===$v)>{{ $l }}</option>@endforeach</select><button class="btn btn-dark">Filter</button><a href="{{ route('trips.index') }}" class="btn btn-light">Reset</a></form>
+<div class="table-responsive desktop-table"><table class="table align-middle"><thead><tr><th>Trip</th><th>Tanggal</th><th>Tonase</th><th>Sawit Buruk</th><th>Harga/Ton</th><th>Transport</th><th>Net</th><th>Status</th></tr></thead><tbody>@forelse($trips as $trip)<tr><td><a class="trip-link" href="{{ route('trips.show',$trip) }}">{{ $trip->trip_number }}</a><small class="d-block text-muted">oleh {{ $trip->creator->name }}</small></td><td>{{ $trip->transaction_date->format('d M Y') }}</td><td>{{ number_format($trip->factory_weight_ton,3,',','.') }} t</td><td>{{ number_format($trip->bad_fruit_ton ?? 0,3,',','.') }} t</td><td>{{ App\Support\Money::rupiah($trip->normal_price_per_ton) }}</td><td>{{ App\Support\Money::rupiah($trip->transport_cost) }}</td><td><strong>{{ App\Support\Money::rupiah($trip->net_after_transport) }}</strong></td><td><span class="status status-{{ $trip->payment_status }}">{{ strtoupper($trip->payment_status) }}</span></td></tr>@empty<tr><td colspan="8" class="text-center text-muted py-5">Belum ada data.</td></tr>@endforelse</tbody></table></div>
+<div class="mobile-list">@foreach($trips as $trip)<a href="{{ route('trips.show',$trip) }}" class="mobile-trip-card"><div><strong>{{ $trip->trip_number }}</strong><span>{{ $trip->transaction_date->format('d M Y') }}</span></div><span class="status status-{{ $trip->payment_status }}">{{ strtoupper($trip->payment_status) }}</span><div class="mobile-trip-metrics"><span><small>Tonase</small>{{ number_format($trip->factory_weight_ton,3,',','.') }} t</span><span><small>Net</small>{{ App\Support\Money::rupiah($trip->net_after_transport) }}</span></div></a>@endforeach</div>
+<div class="mt-3">{{ $trips->links() }}</div>
+</div>
+@endsection
